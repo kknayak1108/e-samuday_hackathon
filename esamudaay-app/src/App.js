@@ -6,12 +6,27 @@ import Pie_Chart from './components/pieChart';
 import { useEffect,useState } from 'react';
 function App() {
   const [data, setData] = useState([])
+
   useEffect(() => {
-    fetch('https://api.test.esamudaay.com/api/v1/businesses/0635ecff-8fde-4185-8cd8-167efda42bbc/report')
+    fetch('https://api.test.esamudaay.com/api/v1/businesses/fec59a4b-5a06-4f17-be5b-758b2e284743/report')
     .then(res => res.json())
     .then(data => setData(data))
      console.log(data)
   }, [])
+
+  function changeData() {
+    fetch('https://api.test.esamudaay.com/api/v1/businesses/f104d365-a41f-40da-8d49-3379f94170d5/report')
+    .then(res => res.json())
+    .then(data => setData(data))
+  }
+
+  let pass = 0
+
+  for(let i = 0; i < data.length; i++) {
+    if(data[i].failure_reasons === null) {
+      pass += 1
+    }
+  }
 
   return (
     <div className="App Container">
@@ -19,12 +34,12 @@ function App() {
         <div className="col-md-5" style={{border:"1px solid black"}}>
           <div>
           <button className="my-4 mx-4" style={{width:"20px",height:"20px",background:"#008000"}}></button>
-          <label>Pass</label> 
+          <label>{pass}</label> 
           </div>
           
           <div>
           <button className="mx-4" style={{width:"20px",height:"20px",background:"#FF0000"}}></button>
-          <label>Pass</label> 
+          <label>{data.length - pass}</label> 
           </div>
            
         </div>
@@ -33,7 +48,7 @@ function App() {
 
       <div className="row">
         <div className="container">
-        <Dashboard/>
+        <Dashboard data={data} pass={pass} change={changeData}/>
         </div>
       
       </div>
